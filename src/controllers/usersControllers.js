@@ -1,31 +1,34 @@
-const helpers = require('../models/dbHelpers');
+const knex = require('../database/connection');
 
 async function createUser(req, res) {
 
-    const { name } = req.body;
+    const { name, email, password, age } = req.body;
 
     if (!name) {
         return res.status(400).json({ message: 'Please inform the user name.' });
     }
 
+    if (!email) {
+        return res.status(400).json({ message: 'Please, inform an email.' });
+    }
 
-    helpers.addUser(req.body)
-        .then(user => {
-            res.status(200).json(user);
-        })
-        .catch(error => {
-            res.status(500).json({ message: "Something went wrong." });
-        })
+    if (!password) {
+        return res.status(400).json({ message: 'Please, inform a password.' });
+    }
+
+    try {
+        const user = { name, age, email, password };
+
+        const newUser = await knex('users').insert(user).returning('*');
+
+        return res.status(201).json(newUser[0]);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 }
 
 async function returnUsers(req, res) {
-    helpers.getUsers()
-        .then(users => {
-            res.status(200).json(users);
-        })
-        .catch(error => {
-            res.status(500).json({ message: "Something went wrong." });
-        })
+
 }
 
 module.exports = {
