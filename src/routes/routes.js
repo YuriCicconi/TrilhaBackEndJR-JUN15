@@ -13,5 +13,6 @@ routes.use(verifyUser);
 routes.get('/api/users', users.returnUsers);
 
 routes.post('/api/tasks', tasks.createTask);
+routes.get('/api/tasks', tasks.returnTasks);
 
 module.exports = routes;
