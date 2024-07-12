@@ -32,6 +32,8 @@ async function updateTask(req, res) {
     const { id } = req.params;
     const user_id = req.userId;
 
+    if (isNaN(id)) return res.status(400).json({ message: 'Please, inform a valid number as parameter.' });
+
     if (!name && !description) {
         return res.status(400).json({ message: 'Please, insert at least one change to be made.' });
     }
@@ -60,8 +62,29 @@ async function updateTask(req, res) {
     }
 }
 
+async function deleteTask(req, res) {
+    const { id } = req.params;
+    const user_id = req.userId;
+
+    if (isNaN(id)) return res.status(400).json({ message: 'Please, inform a valid number as parameter.' });
+
+    try {
+        const validUser = await knex.select('id', 'name', 'description').where('user_id', '=', user_id).andWhere('id', '=', id).from('tasks');
+
+        if (validUser.length > 0) {
+            await knex('tasks').where({ id }).del();
+            return res.status(200).json({ message: 'Task deleted succesfully.' });
+        } else {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 module.exports = {
     createTask,
     returnTasks,
-    updateTask
+    updateTask,
+    deleteTask
 }
