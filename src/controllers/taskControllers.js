@@ -27,7 +27,41 @@ async function returnTasks(req, res) {
     }
 }
 
+async function updateTask(req, res) {
+    const { name, description } = req.body;
+    const { id } = req.params;
+    const user_id = req.userId;
+
+    if (!name && !description) {
+        return res.status(400).json({ message: 'Please, insert at least one change to be made.' });
+    }
+
+    try {
+        const validUser = await knex.select('id', 'name', 'description').where('user_id', '=', user_id).andWhere('id', '=', id).from('tasks');
+
+        if (validUser.length > 0) {
+            if (name && description) {
+                const updatedTask = await knex('tasks').update({ name: name, description: description }).where({ id }).returning('*');
+                return res.status(200).json(updatedTask);
+            } else if (name) {
+                const updatedTask = await knex('tasks').update({ name: name }).where({ id }).returning('*');
+                return res.status(200).json(updatedTask);
+            } else {
+                const updatedTask = await knex('tasks').update({ description: description }).where({ id }).returning('*');
+                return res.status(200).json(updatedTask);
+            }
+        } else {
+            return res.status(401).json({ message: 'Task not found.' });
+        }
+
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 module.exports = {
     createTask,
-    returnTasks
+    returnTasks,
+    updateTask
 }
