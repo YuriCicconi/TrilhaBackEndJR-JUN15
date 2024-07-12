@@ -11,7 +11,10 @@ const verifyUser = (req, res, next) => {
     try {
 
         const cleanToken = jwt.verify(token.replace('Bearer ', ''), jwtPass);
-        console.log(cleanToken);
+
+        req.userId = cleanToken.id;
+
+        next();
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

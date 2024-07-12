@@ -1,4 +1,6 @@
 const knex = require('../database/connection');
+const jwt = require('jsonwebtoken');
+const jwtPassword = require('../../jwtPassword');
 const bcrypt = require('bcrypt');
 
 async function createUser(req, res) {
@@ -66,7 +68,35 @@ async function returnUsers(req, res) {
     }
 }
 
+async function login(req, res) {
+
+    const { email, password } = req.body;
+
+    if (!email || !password) return res.status(400).json({ message: 'Please, inform your e-mail and password.' });
+
+    try {
+        const findEmail = await knex('users').where({ email });
+
+        if (findEmail[0] === undefined) return res.status(401).json({ message: 'E-mail or password are incorrects.' });
+
+        const { password: userPassword, ...user } = findEmail[0];
+
+        const isPasswordRight = await bcrypt.compare(password, userPassword);
+
+        if (!isPasswordRight) return res.status(401).json({ message: 'E-mail or password are incorrects.' });
+
+        const token = jwt.sign({ id: user.id }, jwtPassword, { expiresIn: "8h" });
+
+        const { id, name } = user;
+
+        return res.status(200).json({ id, name, email, token });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
 module.exports = {
     createUser,
-    returnUsers
+    returnUsers,
+    login
 }
