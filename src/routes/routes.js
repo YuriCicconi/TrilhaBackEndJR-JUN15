@@ -16,6 +16,7 @@ routes.use(verifyUser);
 routes.get('/api/users', users.returnUsers);
 
 routes.post('/api/tasks', tasks.createTask);
+routes.get('/api/tasks/:id', tasks.getTask)
 routes.get('/api/tasks', tasks.returnTasks);
 routes.patch('/api/tasks/:id', tasks.updateTask);
 routes.delete('/api/tasks/:id', tasks.deleteTask);
