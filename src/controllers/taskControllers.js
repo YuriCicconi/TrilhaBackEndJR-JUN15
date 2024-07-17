@@ -32,11 +32,12 @@ async function returnTasks(req, res) {
 
 async function getTask(req, res) {
     const { id } = req.params;
+    const user_id = req.userId;
 
     if (isNaN(id)) return res.status(400).json({ message: 'Please, inform a valid number as parameter' });
 
     try {
-        const task = await knex('tasks').where({ id });
+        const task = await knex('tasks').where({ id }).andWhere('user_id', '=', user_id);
 
         if (!task[0]) return res.status(404).json({ message: 'Task not found.' });
         return res.status(200).json(task[0]);
