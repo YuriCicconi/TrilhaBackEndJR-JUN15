@@ -18,9 +18,12 @@ async function createTask(req, res) {
 }
 
 async function returnTasks(req, res) {
-    try {
-        const result = await knex('tasks');
+    const user_id = req.userId;
 
+    try {
+        const result = await knex('tasks').where('user_id', '=', user_id);
+
+        if (!result[0]) return res.status(404).json({ message: 'No tasks found.' });
         return res.status(200).json(result);
     } catch (error) {
         return res.status(500).json({ message: error.message });
