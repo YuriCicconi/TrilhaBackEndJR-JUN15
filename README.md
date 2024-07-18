@@ -11,7 +11,8 @@ Este projeto tem como objetivo desenvolver uma API RESTful para gerenciamento de
 
 ## Requisitos Funcionais:
 - Criar Tarefa: Endpoint para criar uma nova tarefa.
-- Listar Tarefas: Endpoint para listar todas as tarefas.
+- Listar Tarefas por ID da tafefa: Endpoint para mostrar a tarefa com base no id informado.
+- Listar Tarefas: Endpoint para mostrar todas as tarefas registradas para o usuário logado.
 - Atualizar Tarefa: Endpoint para atualizar uma tarefa existente.
 - Deletar Tarefa: Endpoint para deletar uma tarefa existente.
 
@@ -21,67 +22,86 @@ Este projeto tem como objetivo desenvolver uma API RESTful para gerenciamento de
 - Proteção de Rotas: Garantir que apenas usuários autenticados possam acessar os endpoints de tarefas.
 
 ## Banco de Dados:
-- Utilizar SQLite como banco de dados para armazenar informações de usuários e tarefas.
+- Foi utilizado SQLite como banco de dados para armazenar informações de usuários e tarefas.
 
-   #### Estrutura do Projeto:
-   ```plaintext
-   project-root/
-   │
-   ├── src/
-   │   ├── controllers/
-   │   ├── models/
-   │   ├── routes/
-   │   ├── middlewares/
-   │   ├── database/
-   │   └── app.js
-   │
-   ├── .env
-   ├── .gitignore
-   ├── README.md
-   └── package.json
-   ```
-## Entregáveis:
-   1. **Código Fonte:**
-      - Código fonte do projeto, organizado conforme a estrutura acima.
-   2. **Repositório GitHub:**
-      - Repositório público contendo o código fonte e documentação.
-   3. **Documentação:**
-      - README.md com instruções sobre como configurar e executar o projeto, além de detalhes dos endpoints da API.
+## 💻 Instalação
 
-### Detalhes Técnicos: 🔧
-- **Boas Práticas:** Utilizar boas práticas de código limpo, legível e bem documentado.
-- **Git:** Utilizar Git para controle de versão e submeter o projeto através de um repositório público no GitHub.
+```bash
+# Clonar o repositório
+$ git clone https://github.com/YuriCicconi/TrilhaBackEndJR-JUN15.git
 
-### Dicas para Abordar o Projeto 🌟
-- **Crie um Fork desse Repositório.**
-- **Criar do Zero:** É fundamental que o projeto seja desenvolvido completamente do zero, demonstrando suas habilidades e criatividade desde o início.
-- **Utilize bibliotecas** como Express para criação da API e jsonwebtoken para autenticação.
-- **Documente cada etapa do processo para facilitar a compreensão.**
+# Instalar as dependências
+$ npm install
+```
 
-### Critérios de Avaliação: 📝
-- **Funcionalidade:** A aplicação atende aos requisitos funcionais e funciona corretamente?
-- **Qualidade do Código:** O código é limpo, bem estruturado e adequadamente documentado?
-- **Segurança:** A autenticação foi implementada corretamente e as rotas estão protegidas?
-- **Uso do Git:** O controle de versão é usado de forma eficaz com mensagens de commit significativas?
-- **Documentação:** A documentação é clara e detalha o processo de desenvolvimento e uso da API?
+## :white_check_mark: Startar projeto
+```
+$ npm run start
+```
 
-### Não Queremos 🚫
-- Descobrir que o candidato não foi quem realizou o teste.
-- Ver commits grandes sem muita explicação nas mensagens no repositório.
-- Entregas padrão ou cópias de outros projetos. Buscamos originalidade e autenticidade em cada contribuição.
+## 🛣️ Rotas
 
-### Prazo ⏳
-A data máxima para entrega das trilhas foi removida, permitindo que as pessoas entreguem conforme sua disponibilidade. No entanto, ainda é necessário concluir a trilha com sucesso para ser inserido em uma equipe.
+### :couple: Users
+### 🔵 POST /api/users
+### Cadastra usuário no sistema.
+### Corpo da requisição:
+```javascript
+{
+   "name": "User",
+   "age": 22,
+   "email": "user@email.com",
+   "password": "123"
+}
+```
+#### * Todos os campos são obrigatórios.
 
-### Instruções de Entrega: 📬
-Após finalizar o projeto, publique-o em uma URL pública (por exemplo, Vercel, Netlify, GitHub Pages, etc.) e hospede o seu servidor na nuvem. Use serviços que ofereçam uso gratiuto por um período, como a AWS e preencha o [Formulário](https://forms.gle/gZViPMTSDV5nidSu6):  
+### 🔵 POST /api/login
+### Realiza o login do usuário.
+### Corpo da requisição:
+```javascript
+{
+   "email": "user@email.com",
+   "senha": "123"
+}
+```
+#### * Todos os campos são obrigatórios.
 
----
+### 🟢 GET /api/users
+### Retorna todos os usuários cadastrados no sistema.
+#### ** Necessário login do usuário **
 
-### Desafio da Inovação 🚀
-Achou esse projeto inicial simples? Eleve ainda mais! Estamos em busca de mentes inovadoras que não apenas criem, mas que também desafiem os padrões. Como você pode transformar essa estrutura inicial em algo verdadeiramente extraordinário? Demonstre o poder da sua criatividade e o impacto das suas ideias inovadoras!
+## 📚 Tasks
+### 🔵 POST /api/tasks
+### Cria uma nova tarefa para o usuário logado.
+### Corpo da requisição:
+```javascript
+{
+   "name": "Nome da tarefa",
+   "description": "Descrição da tarefa"
+}
+```
+#### ** Necessário login do usuário **
+#### * Apenas o campo name é obrigatório.
 
----
+### 🟢 GET /api/tasks/:id
+### Retorna a tarefa referente ao ID informado (é necessário que a tarefa esteja designada ao usuário logado.
+#### ** Necessário login do usuário **
+
+### 🟢 GET /api/tasks
+### Retorna todas as tarefas designadas ao usuário logado.
+#### ** Necessário login do usuário **
+
+### 🟡 PATCH /api/tasks/:id
+### Altera informações da tarefa referente ao ID informado
+### Corpo da requisição:
+```javascript
+{
+   "name": "Novo nome da tarefa",
+   "description": "Nova descrição da tarefa"
+}
+```
+#### ** Necessário login do usuário **
+#### * Pode ser alterado os 2 campos ou apenas 1.
 
 🔗 **Mantenha-se Conectado:**
 - [Discord](https://discord.gg/wzA9FGZHNv)
