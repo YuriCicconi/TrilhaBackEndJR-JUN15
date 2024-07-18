@@ -6,6 +6,4 @@ const routes = require('./routes/routes');
 app.use(express.json());
 app.use(routes);
 
-app.listen(process.env.PORT, "0.0.0.0", () => {
-    return json({ message: 'Tudo certo' });
-});
+app.listen(process.env.PORT);
